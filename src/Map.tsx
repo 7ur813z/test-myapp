@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Viewer, Entity, CameraFlyTo } from "resium";
+import { Viewer, Entity, CameraFlyTo, ImageryLayer } from "resium";
 import { Cartesian3 } from "cesium";
 import { Ion } from "cesium";
+import { ArcGisMapServerImageryProvider } from "cesium";
 
 interface Location {
   lat: number;
@@ -22,9 +23,19 @@ const Map: React.FC<Location> = ({ lat, lon }) => {
     setLatitude(lat);
     setLongitude(lon);
   }, [lat, lon]);
-
+  const dummyCredit = document.createElement("div");
   return (
-    <Viewer>
+    <Viewer
+      animation={false}
+      timeline={false}
+      fullscreenButton={false}
+      navigationHelpButton={false}
+      baseLayerPicker={false}
+      sceneModePicker={false}
+      homeButton={false}
+      geocoder={false}
+      creditContainer={dummyCredit}
+    >
       <Entity position={position} point={pointGraphics} />
       <CameraFlyTo destination={position} duration={5} />
     </Viewer>

@@ -1,3 +1,5 @@
 <Viewer>
       <Entity position={position} point={pointGraphics} />
     </Viewer>
+
+Bing Maps Aerial = Ar7VgNIKGMgmX3g-u0HxQeHELfpdM1H3saqLQpDQoxQjHHkXRn2Blz9DoKG0vMt1
