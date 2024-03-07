@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Viewer, Entity } from "resium";
+import { Viewer, Entity, CameraFlyTo } from "resium";
 import { Cartesian3 } from "cesium";
 import { Ion } from "cesium";
 
@@ -15,7 +15,7 @@ const Map: React.FC<Location> = ({ lat, lon }) => {
   const [latitude, setLatitude] = useState(lat);
   const [longitude, setLongitude] = useState(lon);
 
-  const position = Cartesian3.fromDegrees(longitude, latitude, 100);
+  const position = Cartesian3.fromDegrees(longitude, latitude, 200);
   const pointGraphics = { pixelSize: 10 };
 
   useEffect(() => {
@@ -26,6 +26,7 @@ const Map: React.FC<Location> = ({ lat, lon }) => {
   return (
     <Viewer>
       <Entity position={position} point={pointGraphics} />
+      <CameraFlyTo destination={position} duration={5} />
     </Viewer>
   );
 };

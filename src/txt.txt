@@ -1,0 +1,3 @@
+<Viewer>
+      <Entity position={position} point={pointGraphics} />
+    </Viewer>
