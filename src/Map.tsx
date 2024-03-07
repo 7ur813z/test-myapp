@@ -1,33 +1,33 @@
+import React, { useState, useEffect } from "react";
 import { Viewer, Entity } from "resium";
-import { Ion } from "cesium";
 import { Cartesian3 } from "cesium";
-import {  GeoJsonDataSource, KmlDataSource } from "resium";
+import { Ion } from "cesium";
 
-const API_KEY: string = process.env.REACT_APP_CESIUM_API_KEY || '';
-const position = Cartesian3.fromDegrees(-74.0707383, 40.7117244, 100);
-const pointGraphics = { pixelSize: 10 };
+interface Location {
+  lat: number;
+  lon: number;
+}
 
+const API_KEY: string = process.env.REACT_APP_CESIUM_API_KEY || "";
 Ion.defaultAccessToken = API_KEY;
 
-const data = {
-    type: "Feature",
-    properties: {
-      name: "Coors Field",
-      amenity: "Baseball Stadium",
-      popupContent: "This is where the Rockies play!",
-    },
-    geometry: {
-      type: "Point",
-      coordinates: [-104.99404, 39.75621],
-    },
-  };
+const Map: React.FC<Location> = ({ lat, lon }) => {
+  const [latitude, setLatitude] = useState(lat);
+  const [longitude, setLongitude] = useState(lon);
 
-const Map = () => {
+  const position = Cartesian3.fromDegrees(longitude, latitude, 100);
+  const pointGraphics = { pixelSize: 10 };
+
+  useEffect(() => {
+    setLatitude(lat);
+    setLongitude(lon);
+  }, [lat, lon]);
+
   return (
     <Viewer>
-        <GeoJsonDataSource data={data} />
-  </Viewer>
+      <Entity position={position} point={pointGraphics} />
+    </Viewer>
   );
-}
+};
 
 export default Map;

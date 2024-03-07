@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import Map from './Map'
+import React, { useState } from "react";
+import axios from "axios";
+import Map from "./Map";
 
 interface Location {
   place_id: number;
@@ -18,10 +18,11 @@ interface Location {
 
 const API_KEY = process.env.REACT_APP_GEOCODING_API_KEY;
 
-const Search: React.FC = () => {
-  const [inputValue, setInputValue] = useState('');
-  const [apiLink, setApiLink] = useState('');
-  
+const Search = () => {
+  const [inputValue, setInputValue] = useState("");
+
+  const [apiLink, setApiLink] = useState("");
+
   const [responseData, setResponseData] = useState<Location[]>([]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -29,18 +30,19 @@ const Search: React.FC = () => {
   };
 
   const generateApiLink = () => {
-    const apiUrl = 'https://geocode.maps.co/search?q=';
-    const apiKeyword = '&api_key=';
-    const formattedValue = inputValue.replace(/\s/g, '+');
+    const apiUrl = "https://geocode.maps.co/search?q=";
+    const apiKeyword = "&api_key=";
+    const formattedValue = inputValue.replace(/\s/g, "+");
     const generatedApiLink = `${apiUrl}${formattedValue}${apiKeyword}${API_KEY}`;
     setApiLink(generatedApiLink);
 
-    axios.get<Location[]>(generatedApiLink)
-      .then(response => {
+    axios
+      .get<Location[]>(generatedApiLink)
+      .then((response) => {
         setResponseData(response.data);
       })
-      .catch(error => {
-        console.error('Error fetching data:', error);
+      .catch((error) => {
+        console.error("Error fetching data:", error);
       });
   };
 
@@ -52,17 +54,13 @@ const Search: React.FC = () => {
         onChange={handleChange}
         placeholder="Enter a postal address"
       />
+
       <button onClick={generateApiLink}>Search</button>
-      <ul>
-        {responseData.map((location) => (
-          <li key={location.place_id}>
-            <h2>{location.display_name}</h2>
-            <p>{location.lat}</p>
-            <p>{location.lon}</p>
-          </li>
-        ))}
-        </ul>
-        <Map />
+
+      <Map
+        lat={responseData[0] ? parseFloat(responseData[0].lat) : 0}
+        lon={responseData[0] ? parseFloat(responseData[0].lon) : 0}
+      />
     </div>
   );
 };

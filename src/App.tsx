@@ -1,9 +1,7 @@
-import Search from './Search'
+import Search from "./Search";
 
 const App = () => {
-  return (
-    <Search />
-  );
-}
+  return <Search />;
+};
 
 export default App;
