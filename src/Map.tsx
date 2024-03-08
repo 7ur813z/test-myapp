@@ -12,9 +12,14 @@ interface Location {
 const API_KEY: string = process.env.REACT_APP_CESIUM_API_KEY || "";
 Ion.defaultAccessToken = API_KEY;
 
-const Map: React.FC<{ lat: number; lon: number }> = ({ lat, lon }) => {
+const Map: React.FC<{ lat: number; lon: number; words: string }> = ({
+  lat,
+  lon,
+  words,
+}) => {
   const [latitude, setLatitude] = useState(lat);
   const [longitude, setLongitude] = useState(lon);
+  const [mywords, setWords] = useState(words);
 
   const userInputProvided = lat !== 0 && lon !== 0;
 
@@ -26,7 +31,8 @@ const Map: React.FC<{ lat: number; lon: number }> = ({ lat, lon }) => {
   useEffect(() => {
     setLatitude(lat);
     setLongitude(lon);
-  }, [lat, lon]);
+    setWords(words);
+  }, [lat, lon, words]);
 
   return (
     <Viewer
@@ -45,16 +51,15 @@ const Map: React.FC<{ lat: number; lon: number }> = ({ lat, lon }) => {
       baseLayer={false}
     >
       {userInputProvided && (
-        <Entity position={position} point={pointGraphics} name="Tokyo" />
+        <Entity
+          position={position}
+          point={pointGraphics}
+          name="3 Words"
+          description={mywords}
+        />
       )}
 
       {userInputProvided && <CameraFlyTo destination={position} duration={5} />}
-
-      {userInputProvided && (
-        <EntityDescription>
-          <h1>Hello, world.</h1>
-        </EntityDescription>
-      )}
     </Viewer>
   );
 };
