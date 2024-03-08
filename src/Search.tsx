@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import Map from "./Map";
+import Words from "./Words";
 
 interface Location {
   place_id: number;
@@ -56,16 +57,13 @@ const Search = () => {
     >
       <h1
         style={{
-          margin: "10px",
+          marginTop: "5px",
+          marginBottom: "5px",
         }}
       >
         TestCarta
       </h1>
-      <div
-        style={{
-          marginBottom: "10px",
-        }}
-      >
+      <div style={{ marginBottom: 5 }}>
         <input
           type="text"
           value={inputValue}
@@ -75,7 +73,10 @@ const Search = () => {
 
         <button onClick={generateApiLink}>Search</button>
       </div>
-
+      <Words
+        lat={responseData[0] ? parseFloat(responseData[0].lat) : 0}
+        lon={responseData[0] ? parseFloat(responseData[0].lon) : 0}
+      />
       <Map
         lat={responseData[0] ? parseFloat(responseData[0].lat) : 0}
         lon={responseData[0] ? parseFloat(responseData[0].lon) : 0}

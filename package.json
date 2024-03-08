@@ -12,6 +12,8 @@
     "@types/node": "^16.18.86",
     "@types/react": "^18.2.63",
     "@types/react-dom": "^18.2.20",
+    "@what3words/api": "^5.1.0",
+    "@what3words/react-components": "^4.2.2",
     "axios": "^1.6.7",
     "cesium": "^1.115.0",
     "craco-cesium": "^1.2.0",
