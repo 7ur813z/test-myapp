@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Viewer, Entity, CameraFlyTo, ImageryLayer } from "resium";
-import { Cartesian3 } from "cesium";
 import { Ion } from "cesium";
-import { ArcGisMapServerImageryProvider } from "cesium";
+
+import { Cartesian3 } from "cesium";
 
 interface Location {
   lat: number;
@@ -16,28 +16,40 @@ const Map: React.FC<Location> = ({ lat, lon }) => {
   const [latitude, setLatitude] = useState(lat);
   const [longitude, setLongitude] = useState(lon);
 
+  const userInputProvided = lat !== 0 && lon !== 0;
+
   const position = Cartesian3.fromDegrees(longitude, latitude, 200);
   const pointGraphics = { pixelSize: 10 };
+
+  const dummyCredit = document.createElement("div");
 
   useEffect(() => {
     setLatitude(lat);
     setLongitude(lon);
   }, [lat, lon]);
-  const dummyCredit = document.createElement("div");
+
   return (
     <Viewer
+      style={{
+        width: "45vw",
+        height: "45vw",
+      }}
       animation={false}
       timeline={false}
       fullscreenButton={false}
       navigationHelpButton={false}
-      baseLayerPicker={false}
       sceneModePicker={false}
       homeButton={false}
       geocoder={false}
+      infoBox={false}
       creditContainer={dummyCredit}
+      baseLayer={false}
     >
-      <Entity position={position} point={pointGraphics} />
-      <CameraFlyTo destination={position} duration={5} />
+      {userInputProvided && (
+        <Entity position={position} point={pointGraphics} />
+      )}
+
+      {userInputProvided && <CameraFlyTo destination={position} duration={5} />}
     </Viewer>
   );
 };

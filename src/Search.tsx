@@ -47,15 +47,34 @@ const Search = () => {
   };
 
   return (
-    <div>
-      <input
-        type="text"
-        value={inputValue}
-        onChange={handleChange}
-        placeholder="Enter a postal address"
-      />
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
+      <h1
+        style={{
+          margin: "10px",
+        }}
+      >
+        TestCarta
+      </h1>
+      <div
+        style={{
+          marginBottom: "10px",
+        }}
+      >
+        <input
+          type="text"
+          value={inputValue}
+          onChange={handleChange}
+          placeholder="Enter a postal address"
+        />
 
-      <button onClick={generateApiLink}>Search</button>
+        <button onClick={generateApiLink}>Search</button>
+      </div>
 
       <Map
         lat={responseData[0] ? parseFloat(responseData[0].lat) : 0}
