@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import axios from "axios";
-import Map from "./Map";
-import Words from "./Words";
 
 interface Location {
   place_id: number;
@@ -17,14 +15,14 @@ interface Location {
   importance: number;
 }
 
+interface ChildProps {
+  onDataUpdate: (lat: number, lon: number) => void;
+}
+
 const API_KEY = process.env.REACT_APP_GEOCODING_API_KEY;
 
-const Search = () => {
+const Search: React.FC<ChildProps> = ({ onDataUpdate }) => {
   const [inputValue, setInputValue] = useState("");
-
-  const [apiLink, setApiLink] = useState("");
-
-  const [responseData, setResponseData] = useState<Location[]>([]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value);
@@ -35,12 +33,17 @@ const Search = () => {
     const apiKeyword = "&api_key=";
     const formattedValue = inputValue.replace(/\s/g, "+");
     const generatedApiLink = `${apiUrl}${formattedValue}${apiKeyword}${API_KEY}`;
-    setApiLink(generatedApiLink);
 
     axios
       .get<Location[]>(generatedApiLink)
       .then((response) => {
-        setResponseData(response.data);
+        const responseData = response.data;
+        if (responseData.length > 0) {
+          const { lat, lon } = responseData[0];
+          onDataUpdate(parseFloat(lat), parseFloat(lon));
+        } else {
+          console.error("No data found in the API response.");
+        }
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -48,17 +51,12 @@ const Search = () => {
   };
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-      }}
-    >
+    <div>
       <h1
         style={{
           marginTop: "5px",
           marginBottom: "5px",
+          textAlign: "center",
         }}
       >
         TestCarta
@@ -73,14 +71,6 @@ const Search = () => {
 
         <button onClick={generateApiLink}>Search</button>
       </div>
-      <Words
-        lat={responseData[0] ? parseFloat(responseData[0].lat) : 0}
-        lon={responseData[0] ? parseFloat(responseData[0].lon) : 0}
-      />
-      <Map
-        lat={responseData[0] ? parseFloat(responseData[0].lat) : 0}
-        lon={responseData[0] ? parseFloat(responseData[0].lon) : 0}
-      />
     </div>
   );
 };

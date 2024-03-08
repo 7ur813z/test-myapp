@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Viewer, Entity, CameraFlyTo, ImageryLayer } from "resium";
+import { Viewer, Entity, CameraFlyTo, EntityDescription } from "resium";
 import { Ion } from "cesium";
 
 import { Cartesian3 } from "cesium";
@@ -12,7 +12,7 @@ interface Location {
 const API_KEY: string = process.env.REACT_APP_CESIUM_API_KEY || "";
 Ion.defaultAccessToken = API_KEY;
 
-const Map: React.FC<Location> = ({ lat, lon }) => {
+const Map: React.FC<{ lat: number; lon: number }> = ({ lat, lon }) => {
   const [latitude, setLatitude] = useState(lat);
   const [longitude, setLongitude] = useState(lon);
 
@@ -41,15 +41,20 @@ const Map: React.FC<Location> = ({ lat, lon }) => {
       sceneModePicker={false}
       homeButton={false}
       geocoder={false}
-      infoBox={false}
       creditContainer={dummyCredit}
       baseLayer={false}
     >
       {userInputProvided && (
-        <Entity position={position} point={pointGraphics} />
+        <Entity position={position} point={pointGraphics} name="Tokyo" />
       )}
 
       {userInputProvided && <CameraFlyTo destination={position} duration={5} />}
+
+      {userInputProvided && (
+        <EntityDescription>
+          <h1>Hello, world.</h1>
+        </EntityDescription>
+      )}
     </Viewer>
   );
 };

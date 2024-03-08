@@ -28,7 +28,7 @@ interface Location {
 
 const API_KEY = process.env.REACT_APP_WHAT_THREE_WORDS_API_KEY;
 
-const Words: React.FC<Location> = ({ lat, lon }) => {
+const Words: React.FC<{ lat: number; lon: number }> = ({ lat, lon }) => {
   const userInputProvided = lat !== 0 && lon !== 0;
   const [apiLink, setApiLink] = useState("");
 
