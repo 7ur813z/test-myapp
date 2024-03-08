@@ -16,22 +16,22 @@ interface Location {
 }
 
 interface ChildProps {
-  onDataUpdate: (lat: number, lon: number) => void;
+  onLocationUpdate: (lat: number, lon: number) => void;
 }
 
-const API_KEY = process.env.REACT_APP_GEOCODING_API_KEY;
+const Search: React.FC<ChildProps> = ({ onLocationUpdate }) => {
+  const API_KEY = process.env.REACT_APP_GEOCODING_API_KEY;
 
-const Search: React.FC<ChildProps> = ({ onDataUpdate }) => {
-  const [inputValue, setInputValue] = useState("");
+  const [location, setLocation] = useState("");
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(event.target.value);
+  const handleChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setLocation(event.target.value);
   };
 
-  const generateApiLink = () => {
+  const getLocationData = () => {
     const apiUrl = "https://geocode.maps.co/search?q=";
     const apiKeyword = "&api_key=";
-    const formattedValue = inputValue.replace(/\s/g, "+");
+    const formattedValue = location.replace(/\s/g, "+");
     const generatedApiLink = `${apiUrl}${formattedValue}${apiKeyword}${API_KEY}`;
 
     axios
@@ -40,7 +40,7 @@ const Search: React.FC<ChildProps> = ({ onDataUpdate }) => {
         const responseData = response.data;
         if (responseData.length > 0) {
           const { lat, lon } = responseData[0];
-          onDataUpdate(parseFloat(lat), parseFloat(lon));
+          onLocationUpdate(parseFloat(lat), parseFloat(lon));
         } else {
           console.error("No data found in the API response.");
         }
@@ -57,19 +57,22 @@ const Search: React.FC<ChildProps> = ({ onDataUpdate }) => {
           marginTop: "5px",
           marginBottom: "5px",
           textAlign: "center",
+          fontFamily: "Verdana",
         }}
       >
         TestCarta
       </h1>
       <div style={{ marginBottom: 5 }}>
         <input
+          id="1"
+          name="input"
           type="text"
-          value={inputValue}
-          onChange={handleChange}
+          value={location}
+          onChange={handleChangeInput}
           placeholder="Enter a postal address"
         />
 
-        <button onClick={generateApiLink}>Search</button>
+        <button onClick={getLocationData}>Search</button>
       </div>
     </div>
   );

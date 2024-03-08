@@ -21,41 +21,39 @@ interface ResponseData {
   map: string;
 }
 
-interface Location {
+interface Data {
   lat: number;
   lon: number;
   onWordsUpdate: (words: string) => void;
 }
 
-const API_KEY = process.env.REACT_APP_WHAT_THREE_WORDS_API_KEY;
+const Words: React.FC<Data> = ({ lat, lon, onWordsUpdate }) => {
+  const API_KEY = process.env.REACT_APP_WHAT_THREE_WORDS_API_KEY;
 
-const Words: React.FC<Location> = ({ lat, lon, onWordsUpdate }) => {
   const userInputProvided = lat !== 0 && lon !== 0;
-
-  const [apiLink, setApiLink] = useState("");
 
   const [responseData, setResponseData] = useState<ResponseData | null>(null);
 
-  const generateApiLink = () => {
-    const apiUrl = "https://api.what3words.com/v3/convert-to-3wa?coordinates=";
-    const apiKeyword = "&key=";
-    const generatedApiLink = `${apiUrl}${lat}%2C${lon}${apiKeyword}${API_KEY}`;
-    setApiLink(generatedApiLink);
-
-    axios
-      .get<ResponseData>(generatedApiLink)
-      .then((response) => {
-        setResponseData(response.data);
-        onWordsUpdate(response.data.words);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-  };
-
   React.useEffect(() => {
+    const generateApiLink = () => {
+      const apiUrl =
+        "https://api.what3words.com/v3/convert-to-3wa?coordinates=";
+      const apiKeyword = "&key=";
+      const generatedApiLink = `${apiUrl}${lat}%2C${lon}${apiKeyword}${API_KEY}`;
+
+      axios
+        .get<ResponseData>(generatedApiLink)
+        .then((response) => {
+          setResponseData(response.data);
+          onWordsUpdate(response.data.words);
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+        });
+    };
+
     generateApiLink();
-  }, [lat, lon]);
+  }, [lat, lon, onWordsUpdate]);
 
   return userInputProvided ? (
     <div style={{ marginBottom: 5 }}>{responseData?.words}</div>

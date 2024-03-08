@@ -1,29 +1,29 @@
 import React, { useState, useEffect } from "react";
-import { Viewer, Entity, CameraFlyTo, EntityDescription } from "resium";
+import { Viewer, Entity, CameraFlyTo } from "resium";
 import { Ion } from "cesium";
 
 import { Cartesian3 } from "cesium";
 
-interface Location {
+interface Data {
   lat: number;
   lon: number;
+  words: string;
 }
 
 const API_KEY: string = process.env.REACT_APP_CESIUM_API_KEY || "";
 Ion.defaultAccessToken = API_KEY;
 
-const Map: React.FC<{ lat: number; lon: number; words: string }> = ({
-  lat,
-  lon,
-  words,
-}) => {
+const Map: React.FC<Data> = ({ lat, lon, words }) => {
   const [latitude, setLatitude] = useState(lat);
+
   const [longitude, setLongitude] = useState(lon);
+
   const [mywords, setWords] = useState(words);
 
   const userInputProvided = lat !== 0 && lon !== 0;
 
   const position = Cartesian3.fromDegrees(longitude, latitude, 200);
+
   const pointGraphics = { pixelSize: 10 };
 
   const dummyCredit = document.createElement("div");
@@ -49,6 +49,7 @@ const Map: React.FC<{ lat: number; lon: number; words: string }> = ({
       geocoder={false}
       creditContainer={dummyCredit}
       baseLayer={false}
+      infoBox={true}
     >
       {userInputProvided && (
         <Entity
